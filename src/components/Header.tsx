@@ -11,7 +11,7 @@ export const Header = () => {
   const headerNavLinks = [
     { href: "/blog", title: "Blog" },
     { href: "/tags", title: "Tags" },
-    { href: "/projects", title: "Projects" },
+    { href: "/create", title: "Create" },
     { href: "/about", title: "About" },
   ];
 
@@ -44,7 +44,7 @@ export const Header = () => {
           <IoSearchSharp className="w-6 h-6 cursor-pointer" />
         </span>
 
-        <ThemeSwitch />
+        {/* <ThemeSwitch /> */}
         <MobileNav />
       </div>
     </header>

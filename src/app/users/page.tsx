@@ -1,19 +1,23 @@
+"use client";
 import { useState } from "react";
 import UsersCard from "../../components/ui/UsersCard";
 import { BiSearchAlt } from "react-icons/bi";
-import useFetch from "../../hooks/useFetch";
+// import useFetch from "../../hooks/useFetch";
 import { Input } from "@/components/ui/input";
 
 const Users = () => {
   const [input, setInput] = useState("all");
-  const [search, setSearch] = useState(null);
-  const { data, isError, loading } = useFetch(
-    `/get-users/${input}`,
-    `users/${input}`
-  );
+  const [search, setSearch] = useState<string | null>(null);
+  // const { data, isError, loading } = useFetch(
+  //   `/get-users/${input}`,
+  //   `users/${input}`
+  // );
+  const data = ["a"];
+  const isError = false;
+  const loading = true;
   const handelSubmit = (e) => {
     e.preventDefault();
-    if (search.length === 0) {
+    if (search?.length === 0) {
       return setInput("all");
     }
     setInput(search);
@@ -21,7 +25,8 @@ const Users = () => {
 
   return (
     <div className="my-24 sm:my-36 flex flex-col gap-10 items-center">
-      <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" />
+      {/* <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" /> */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] -z-10 h-full w-full  bg-[size:6rem_4rem] opacity-[0.05]" />
       <h1 className="text-4xl font-[500] w-4/5 text-slate-100 sm:w-[65%] text-center">
         Discover and Connect with Talented Content Creators!
       </h1>
@@ -33,6 +38,7 @@ const Users = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
         <button
+          title="submitButton"
           type="submit"
           className="h-12 px-5 text-xl absolute top-0 right-1"
         >

@@ -1,10 +1,12 @@
+"use client";
 import { categories, capitalizeFirstLetter } from "../../lib/categories";
 import { useState } from "react";
 import { FaUpload } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+
 import ReactQuill from "react-quill";
+import QuillEditor from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import useSend from "../../hooks/useSend";
 import {
   Select,
@@ -14,6 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 
 const CreateBlog = () => {
@@ -22,7 +26,7 @@ const CreateBlog = () => {
   const [img, setImg] = useState(null);
   const [category, setCategory] = useState("all");
   const formData = new FormData();
-  const redirect = useNavigate();
+  const router = useRouter();
   const { fetchData, loading, error } = useSend();
   const { toast } = useToast();
 
@@ -48,8 +52,9 @@ const CreateBlog = () => {
     formData.delete("title");
     formData.delete("category");
     formData.delete("description");
-    return redirect(`/blogs/${response._id}`);
+    return router.push(`/blogs/${response._id}`);
   };
+  // const { quill, quillRef } = useQuill();
 
   return (
     <div className="flex justify-center my-24 sm:mt-36">
@@ -73,7 +78,17 @@ const CreateBlog = () => {
             placeholder="Title"
             onChange={(e) => setTitle(e.target.value)}
           />
-          <ReactQuill theme="snow" value={desc} onChange={setDesc} />
+          <div className=" px-1 mb-10">
+            {/* <ReactQuill theme="snow" value={desc} onChange={setDesc} /> */}
+            <QuillEditor
+              // style={{ border: "2px solid black",  border:"rounded" }}
+              className=" h-[500px]"
+              theme="snow"
+              value={desc}
+              onChange={(value) => setDesc(value)}
+            />
+          </div>
+
           <div className="flex gap-4 flex-col sm:flex-row">
             <Select
               name="category"
@@ -93,6 +108,7 @@ const CreateBlog = () => {
                 })}
               </SelectContent>
             </Select>
+
             <label
               htmlFor="input-file"
               className="border border-input bg-background hover:bg-accent hover:text-accent-foreground gap-2 flex-grow h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -102,7 +118,7 @@ const CreateBlog = () => {
             <input
               type="file"
               name="img"
-              onChange={(e) => setImg(e.target.files[0])}
+              // onChange={(e) => setImg(e.target.files[0])}
               className="hidden"
               id="input-file"
               accept="image/*"

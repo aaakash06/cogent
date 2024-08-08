@@ -55,14 +55,15 @@ const Home = () => {
     ];
   };
   return (
-    <div className="flex flex-col items-center justify-center ">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] opacity-[0.05]" />
-      <div className="absolute size-96 bg-neutral-700 top-0 rounded-full blur-[150px] -z-50" />
-      <div className="my-44 sm:my-52 flex flex-col gap-14 items-center justify-center text-center">
+    <div className="flex flex-col items-center justify-center w-full ">
+      {/* <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] -z-10 h-full w-full  bg-[size:6rem_4rem] opacity-[0.05]" /> */}
+      <div className="absolute top-0 z-[-2] min-h-screen w-[97%] bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" />
+      <div className="absolute size-96 bg-neutral-700 top-0 rounded-full blur-[150px] -z-50 " />
+      <div className="my-[150px] sm:my-40 flex flex-col gap-14 items-center justify-center text-center">
         <h1 className="text-5xl md:w-[75%] md:text-6xl xl:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 leading-tight px-4 md:px-0">
           Start Sharing Your Voice Today!
         </h1>
-        <p className="w-11/12 md:w-[55%] sm:text-xl text-slate-400">
+        <p className="w-11/12 md:w-[70%] sm:text-xl text-slate-400">
           Ignite your passion for writing and share your voice with the world
           through our{" "}
           <span className="text-slate-100">intuitive blogging platform.</span>{" "}
@@ -129,12 +130,12 @@ const Home = () => {
           })}
         </ul>
       </div>
-      <div className="grid grid-cols-1 bg-white md:grid-cols-2 xl:grid-cols-3 gap-10 justify-items-center mt-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 justify-items-center mt-20 ">
         {loading ? (
           Array.from({ length: 9 }).map((items, index) => {
             return (
               <div
-                className="flex flex-col space-y-3 w-[80vw] md:w-[25rem]"
+                className="flex flex-col space-y-3 px-3 w-[80vw] md:w-[25rem]"
                 key={index}
               >
                 <Skeleton className="h-[12rem] md:h-[14rem] w-full rounded-xl" />

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import SectionContainer from "@/components/SectionContainer";
+import { ThemeContextProvider } from "@/context/theme";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,13 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
-        <SectionContainer>
-          <Header></Header>
-          {children}
-        </SectionContainer>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="dark">
+        <ThemeContextProvider>
+          <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
+            <SectionContainer>
+              <Header></Header>
+              {children}
+            </SectionContainer>
+          </body>
+        </ThemeContextProvider>
+      </html>
+    </ClerkProvider>
   );
 }
