@@ -154,7 +154,7 @@ export const getAllPosts = async (
       .limit(5);
     // console.log(allPosts)
     const noPosts = await Post.countDocuments(query);
-    return { allPosts, noPosts };
+    return allPosts;
   } catch (err) {
     console.log("coudn't fetch posts");
     console.log(err);

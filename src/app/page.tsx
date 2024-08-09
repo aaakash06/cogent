@@ -1,5 +1,3 @@
-"use client";
-
 import { Input } from "@/components/ui/input";
 import { categories, capitalizeFirstLetter } from "@/lib/categories";
 import { useRef, useState } from "react";
@@ -7,53 +5,66 @@ import { BiSearchAlt } from "react-icons/bi";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAllPosts } from "@/database/actions.db";
+import PostCarts from "@/components/PostCarts";
+import { IPost } from "@/database/models.db";
 
-const Home = () => {
-  const searchParams = useSearchParams();
-  const category = searchParams.get("category") || "all";
-  const search = useRef("");
-  const loading = true;
-  const [searchRes, setSearchRes] = useState<
-    | null
-    | {
-        _id: string;
-        title: string;
-      }[]
-  >(null);
-  const searchHandler = async () => {
-    // const res = await fetchData(`/search/${search.current.value}`);
-    await new Promise((r) => {
-      setTimeout(r, 2000);
-    });
-    const res = [
-      { _id: "123", title: "belori" },
-      { _id: "124", title: "tyappe" },
-      { _id: "122", title: "tyappe" },
-      { _id: "1", title: "tyappe" },
-      { _id: "123", title: "belori" },
-      { _id: "124", title: "tyappe" },
-      { _id: "122", title: "tyappe" },
-      { _id: "1", title: "tyappe" },
-    ];
-    setSearchRes(res);
-    res && res.length > 0 && setIsFocused(true);
-  };
-  const [isFocused, setIsFocused] = useState(false);
-  const handleInputBlur = () => {
-    setTimeout(() => {
-      setIsFocused(false);
-    }, 200);
-    const data = [
-      { _id: "123", title: "belori" },
-      { _id: "124", title: "tyappe" },
-      { _id: "122", title: "tyappe" },
-      { _id: "1", title: "tyappe" },
-      { _id: "123", title: "belori" },
-      { _id: "124", title: "tyappe" },
-      { _id: "122", title: "tyappe" },
-      { _id: "1", title: "tyappe" },
-    ];
-  };
+const Home = async () => {
+  // const searchParams = useSearchParams();
+  // const category = searchParams.get("category") || "all";
+  // const search = useRef("");
+  const category = "all";
+  const posts: IPost[] = await getAllPosts()!;
+  console.log(posts);
+
+  // getAllPosts().then((data) => {
+  //   const { allPosts } = data!;
+  //   dataRef.current = allPosts;
+  //   setLoading(false);
+  // });
+
+  // const [searchRes, setSearchRes] = useState<
+  //   | null
+  //   | {
+  //       _id: string;
+  //       title: string;
+  //     }[]
+  // >(null);
+  // const searchHandler = async () => {
+  //   // const res = await fetchData(`/search/${search.current.value}`);
+
+  //   await new Promise((r) => {
+  //     setTimeout(r, 2000);
+  //   });
+  //   const res = [
+  //     { _id: "123", title: "belori" },
+  //     { _id: "124", title: "tyappe" },
+  //     { _id: "122", title: "tyappe" },
+  //     { _id: "1", title: "tyappe" },
+  //     { _id: "123", title: "belori" },
+  //     { _id: "124", title: "tyappe" },
+  //     { _id: "122", title: "tyappe" },
+  //     { _id: "1", title: "tyappe" },
+  //   ];
+  //   setSearchRes(res);
+  //   res && res.length > 0 && setIsFocused(true);
+  // };
+  // const [isFocused, setIsFocused] = useState(false);
+  // const handleInputBlur = () => {
+  //   setTimeout(() => {
+  //     setIsFocused(false);
+  //   }, 200);
+  //   // const data = [
+  //   //   { _id: "123", title: "belori" },
+  //   //   { _id: "124", title: "tyappe" },
+  //   //   { _id: "122", title: "tyappe" },
+  //   //   { _id: "1", title: "tyappe" },
+  //   //   { _id: "123", title: "belori" },
+  //   //   { _id: "124", title: "tyappe" },
+  //   //   { _id: "122", title: "tyappe" },
+  //   //   { _id: "1", title: "tyappe" },
+  //   // ];
+  // };
   return (
     <div className="flex flex-col items-center justify-center w-full ">
       {/* <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] -z-10 h-full w-full  bg-[size:6rem_4rem] opacity-[0.05]" /> */}
@@ -74,10 +85,10 @@ const Home = () => {
             type="text"
             placeholder="Search Blogs"
             className="rounded-xl h-12 bg-transparent backdrop-blur-sm"
-            ref={search}
-            onChange={searchHandler}
-            onFocus={() => setIsFocused(true)}
-            onBlur={handleInputBlur}
+            // ref={search}
+            // onChange={searchHandler}
+            // onFocus={() => setIsFocused(true)}
+            // onBlur={handleInputBlur}
           />
           <BiSearchAlt className="absolute h-11 top-1 right-5 text-xl" />
           {/* {searchRes && searchRes.length > 0 && isFocused && (
@@ -130,38 +141,7 @@ const Home = () => {
           })}
         </ul>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 justify-items-center mt-20 ">
-        {loading ? (
-          Array.from({ length: 9 }).map((items, index) => {
-            return (
-              <div
-                className="flex flex-col space-y-3 px-3 w-[80vw] md:w-[25rem]"
-                key={index}
-              >
-                <Skeleton className="h-[12rem] md:h-[14rem] w-full rounded-xl" />
-                <div className="space-y-2">
-                  <Skeleton className="h-5 w-4/5" />
-                  <div className="flex gap-2">
-                    <Skeleton className="size-10 rounded-full" />
-                    <div className="w-3/5 space-y-2">
-                      <Skeleton className="w-3/5 h-3 " />
-                      <Skeleton className="w-2/5 h-3   " />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : data && data.length > 0 ? (
-          data.map((items) => {
-            return <div>hi</div>;
-          })
-        ) : (
-          <div className="col-span-3 flex justify-center items-center">
-            <h1>Cannot find any blog.</h1>
-          </div>
-        )}
-      </div>
+      <PostCarts posts={posts}></PostCarts>
       {/* <Footer /> */}
     </div>
   );
