@@ -9,16 +9,16 @@ import { IoSearchSharp } from "react-icons/io5";
 
 export const Header = () => {
   const headerNavLinks = [
-    { href: "/blog", title: "Blog" },
-    { href: "/tags", title: "Tags" },
+    { href: "/", title: "Blog" },
+    // { href: "/tags", title: "Tags" },
     { href: "/create", title: "Create" },
-    { href: "/about", title: "About" },
+    // { href: "/about", title: "About" },
   ];
 
   return (
     <header className="flex items-center justify-between py-10">
       <div>
-        <Link href="/home">
+        <Link href="/">
           <div className="flex items-center justify-between">
             <div className="mr-3">{/* <Logo /> */}</div>
 
@@ -30,7 +30,7 @@ export const Header = () => {
       </div>
       <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
         {headerNavLinks
-          .filter((link) => link.href !== "/")
+          // .filter((link) => link.href !== "/")
           .map((link) => (
             <Link
               key={link.title}

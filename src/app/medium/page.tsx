@@ -1,157 +1,151 @@
 "use client";
+import { categories, capitalizeFirstLetter } from "../../lib/categories";
+import { useState } from "react";
+import { FaUpload } from "react-icons/fa6";
 
-import Image from "next/image";
-import styles from "./writePage.module.css";
-import { useEffect, useState } from "react";
-import "react-quill/dist/quill.bubble.css";
+import QuillEditor from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { Button } from "@/components/ui/button";
+import useSend from "../../hooks/useSend";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+
 import { useRouter } from "next/navigation";
-// import { useSession } from "next-auth/react";
-// import {
-//   getStorage,
-//   ref,
-//   uploadBytesResumable,
-//   getDownloadURL,
-// } from "firebase/storage";
-// import { app } from "@/utils/firebase";
-import ReactQuill from "react-quill";
+import { Input } from "@/components/ui/input";
 
-const WritePage = () => {
-  const { status } = useSession();
-  const router = useRouter();
-
-  const [open, setOpen] = useState(false);
-  const [file, setFile] = useState(null);
-  const [media, setMedia] = useState("");
-  const [value, setValue] = useState("");
+const CreateBlog = () => {
   const [title, setTitle] = useState("");
-  const [catSlug, setCatSlug] = useState("");
+  const [desc, setDesc] = useState("");
+  const [img, setImg] = useState(null);
+  const [category, setCategory] = useState("all");
+  const formData = new FormData();
+  const router = useRouter();
+  const { fetchData, loading, error } = useSend();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    // const storage = getStorage(app);
-    const upload = () => {
-      const name = new Date().getTime() + file?.name;
-      const storageRef = ref(storage, name);
-
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setMedia(downloadURL);
-          });
-        }
-      );
-    };
-
-    file && upload();
-  }, [file]);
-
-  if (status === "loading") {
-    return <div className={styles.loading}>Loading...</div>;
-  }
-
-  if (status === "unauthenticated") {
-    router.push("/");
-  }
-
-  const slugify = (str) =>
-    str
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const handleSubmit = async () => {
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        desc: value,
-        img: media,
-        slug: slugify(title),
-        catSlug: catSlug || "style", //If not selected, choose the general category
-      }),
-    });
-
-    if (res.status === 200) {
-      const data = await res.json();
-      router.push(`/posts/${data.slug}`);
+  const submitHandler = async (e: any) => {
+    e.preventDefault();
+    formData.append("title", title);
+    formData.append("description", desc);
+    formData.append("category", category || "all");
+    if (img) {
+      formData.append("img", img);
     }
+    const response = await fetchData("/create-blog", "POST", formData);
+    if (!response) {
+      return null;
+    }
+    const date = new Date();
+    toast({
+      title: "Blog Created Sucessfully!",
+      description: date.toString(),
+    });
+    setImg(null);
+    formData.delete("img");
+    formData.delete("title");
+    formData.delete("category");
+    formData.delete("description");
+    return router.push(`/blogs/${response._id}`);
   };
+  // const { quill, quillRef } = useQuill();
 
   return (
-    <div className={styles.container}>
-      <input
-        type="text"
-        placeholder="Title"
-        className={styles.input}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <select
-        className={styles.select}
-        onChange={(e) => setCatSlug(e.target.value)}
-      >
-        <option value="style">style</option>
-        <option value="fashion">fashion</option>
-        <option value="food">food</option>
-        <option value="culture">culture</option>
-        <option value="travel">travel</option>
-        <option value="coding">coding</option>
-      </select>
-      <div className={styles.editor}>
-        <button className={styles.button} onClick={() => setOpen(!open)}>
-          <Image src="/plus.png" alt="" width={16} height={16} />
-        </button>
-        {open && (
-          <div className={styles.add}>
+    <div className="flex justify-center my-24 sm:mt-36 border-2 border-red-900">
+      <div className="flex flex-col sm:p-10 w-[90%] sm:w-[45rem] h-[fit-content] gap-8 rounded-xl sm:border ">
+        <div className="space-y-2 text-sm">
+          <h1 className="text-4xl font-[500]">What&#39;s on your mind?</h1>
+          <p className="text-slate-300">
+            Start sharing your thoughts and stories with the world by crafting
+            your own unique blog on our platform.
+          </p>
+        </div>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={submitHandler}
+          encType="multipart/form-data"
+        >
+          <Input
+            type="text"
+            name="title"
+            required
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <div className=" px-1 mb-10">
+            {/* <ReactQuill theme="snow" value={desc} onChange={setDesc} /> */}
+            <QuillEditor
+              // style={{ border: "2px solid black",  border:"rounded" }}
+              className=" h-[500px]"
+              theme="snow"
+              value={desc}
+              onChange={(value) => setDesc(value)}
+            />
+          </div>
+
+          <div className="flex gap-4 flex-col sm:flex-row">
+            <Select
+              name="category"
+              onValueChange={(value) => setCategory(value)}
+              value={category}
+            >
+              <SelectTrigger className="flex-grow sm:w-[50%] h-10">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((items, index) => {
+                  return (
+                    <SelectItem value={items} key={index}>
+                      {capitalizeFirstLetter(items)}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+
+            <label
+              htmlFor="input-file"
+              className="border border-input bg-background hover:bg-accent hover:text-accent-foreground gap-2 flex-grow h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <FaUpload /> Upload File
+            </label>
             <input
               type="file"
-              id="image"
-              onChange={(e) => setFile(e.target.files[0])}
-              style={{ display: "none" }}
+              name="img"
+              // onChange={(e) => setImg(e.target.files[0])}
+              className="hidden"
+              id="input-file"
+              accept="image/*"
+              required
             />
-            <button className={styles.addButton}>
-              <label htmlFor="image">
-                <Image src="/image.png" alt="" width={16} height={16} />
-              </label>
-            </button>
-            <button className={styles.addButton}>
-              <Image src="/external.png" alt="" width={16} height={16} />
-            </button>
-            <button className={styles.addButton}>
-              <Image src="/video.png" alt="" width={16} height={16} />
-            </button>
           </div>
-        )}
-        <ReactQuill
-          className={styles.textArea}
-          theme="bubble"
-          value={value}
-          onChange={setValue}
-          placeholder="Tell your story..."
-        />
+          {img && (
+            <img
+              src={URL.createObjectURL(img)}
+              alt="Preview"
+              className="aspect-video object-contain"
+            />
+          )}
+          <Button type="submit" disabled={loading}>
+            Create
+          </Button>
+          <h1 className="text-center">
+            {loading && "Processing...Please Wait."}
+          </h1>
+          {!loading && error && (
+            <h1 className="text-red-500 text-center">
+              Error while creating blog.
+            </h1>
+          )}
+        </form>
       </div>
-      <button className={styles.publish} onClick={handleSubmit}>
-        Publish
-      </button>
     </div>
   );
 };
 
-export default WritePage;
+export default CreateBlog;

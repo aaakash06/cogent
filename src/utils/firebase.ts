@@ -4,13 +4,15 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optionaln
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE,
-  authDomain: "blog-cddc2.firebaseapp.com",
-  projectId: "blog-cddc2",
-  storageBucket: "blog-cddc2.appspot.com",
-  messagingSenderId: "413696194974",
-  appId: "1:413696194974:web:bc0a551cd5558bdf0dbe8f",
+  apiKey: "AIzaSyAz8GsBMKSPet633PplPPsQAvTFzgEjrZs",
+  authDomain: "cogent-5dcf9.firebaseapp.com",
+  projectId: "cogent-5dcf9",
+  storageBucket: "cogent-5dcf9.appspot.com",
+  messagingSenderId: "577109663658",
+  appId: "1:577109663658:web:79b0977ee637d3212215d3",
+  measurementId: "G-BNJJCNEH5Z",
 };
 
 // Initialize Firebase

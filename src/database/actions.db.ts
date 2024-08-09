@@ -3,14 +3,17 @@
 import { connectToDB } from "./connect.db";
 import { revalidatePath } from "next/cache";
 import { Category, ICategory, ObjectIdType, Post, User } from "./models.db";
+import { slugify } from "@/utils/slugify";
+import { Tag } from "lucide-react";
+import { FilterQuery } from "mongoose";
+import { categories } from "@/lib/categories";
 type PostType = {
   title: string;
   slug: string;
   content: string;
-  img?: string;
+  img: string;
   categories: string[];
-  author: ObjectIdType;
-  createdAt: Date;
+  author: string;
 };
 
 export async function dummyAction() {
@@ -62,7 +65,7 @@ export async function createPost(data: PostType) {
 
     // let categoryName;
     for (let categoryName of categorysArray) {
-      let categoryFound = await Category.findOne({ name: categoryName });
+      let categoryFound = await Category.findOne({ title: categoryName });
 
       if (categoryFound) {
         console.log("seems category has been found ");
@@ -74,7 +77,8 @@ export async function createPost(data: PostType) {
         console.log("coudn't find the category");
         console.log("creating new category");
         const newcategory = await Category.create({
-          name: categoryName,
+          title: categoryName,
+          slug: slugify(categoryName),
         });
         categoryDocs.push(newcategory);
         categoryArray.push(await newcategory._id);
@@ -85,7 +89,7 @@ export async function createPost(data: PostType) {
     // console.log(categoryArray);
     const neww = await Post.create({
       ...data,
-      categorys: categoryArray,
+      categories: categoryArray,
       author: data.author,
     });
 
@@ -102,5 +106,57 @@ export async function createPost(data: PostType) {
   } catch (err) {
     console.log("coudn't create the Post");
     console.log(err);
+    return 400;
   }
 }
+
+export const getAllPosts = async (
+  searchParams?: string,
+  filter?: string,
+  page?: number
+) => {
+  try {
+    const query: FilterQuery<typeof Post> = {};
+
+    if (searchParams) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchParams, "i") } },
+        { content: { $regex: new RegExp(searchParams, "i") } },
+      ];
+    }
+    let skips = (page! - 1) * 5 || 0;
+
+    let sortQuery = {};
+    sortQuery = { createdAt: -1 };
+    // newest recommended frequent unanswered
+    await connectToDB();
+    switch (filter) {
+      case "newest":
+        sortQuery = { createdAt: -1 };
+        break;
+      case "frequent":
+        sortQuery = { views: -1 };
+        break;
+
+      case "unanswered":
+        query.answers = { $size: 0 };
+        break;
+
+      default:
+        sortQuery = { createdAt: -1 };
+        break;
+    }
+
+    let allPosts = await Post.find(query)
+      .populate({ path: "categories", model: Category })
+      .sort(sortQuery)
+      .skip(skips)
+      .limit(5);
+    // console.log(allPosts)
+    const noPosts = await Post.countDocuments(query);
+    return { allPosts, noPosts };
+  } catch (err) {
+    console.log("coudn't fetch posts");
+    console.log(err);
+  }
+};

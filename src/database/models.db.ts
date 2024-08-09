@@ -68,7 +68,7 @@ const userSchema = new mongoose.Schema<IUser>({
   joinAt: { type: Date, default: Date.now },
 });
 
-const postSchema = new Schema<IPost>({
+export const postSchema = new Schema<IPost>({
   title: {
     type: String,
     required: true,
