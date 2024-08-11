@@ -7,15 +7,16 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllPosts } from "@/database/actions.db";
 import PostCarts from "@/components/PostCarts";
-import { IPost } from "@/database/models.db";
+import { IPost, postSchema } from "@/database/models.db";
 
 const Home = async () => {
   // const searchParams = useSearchParams();
   // const category = searchParams.get("category") || "all";
   // const search = useRef("");
   const category = "all";
+  //@ts-ignore
   const posts: IPost[] = await getAllPosts()!;
-  console.log(posts);
+  // console.log(posts);
 
   // getAllPosts().then((data) => {
   //   const { allPosts } = data!;
@@ -141,7 +142,7 @@ const Home = async () => {
           })}
         </ul>
       </div>
-      <PostCarts posts={posts}></PostCarts>
+      <PostCarts posts={JSON.stringify(posts)}></PostCarts>
       {/* <Footer /> */}
     </div>
   );

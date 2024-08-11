@@ -2,7 +2,15 @@
 
 import { connectToDB } from "./connect.db";
 import { revalidatePath } from "next/cache";
-import { Category, ICategory, ObjectIdType, Post, User } from "./models.db";
+import {
+  Category,
+  ICategory,
+  IPost,
+  ObjectIdType,
+  Post,
+  postSchema,
+  User,
+} from "./models.db";
 import { slugify } from "@/utils/slugify";
 import { Tag } from "lucide-react";
 import { FilterQuery } from "mongoose";
@@ -147,7 +155,7 @@ export const getAllPosts = async (
         break;
     }
 
-    let allPosts = await Post.find(query)
+    let allPosts: IPost[] = await Post.find(query)
       .populate({ path: "categories", model: Category })
       .sort(sortQuery)
       .skip(skips)

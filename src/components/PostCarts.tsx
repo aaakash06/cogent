@@ -1,17 +1,15 @@
 "use client";
-
-import { useState, useRef } from "react";
-import { Skeleton } from "./ui/skeleton";
-import { getAllPosts } from "@/database/actions.db";
 import { IPost } from "@/database/models.db";
+import { useState } from "react";
+import { Skeleton } from "./ui/skeleton";
+import BlogsCard from "./BlogsCard";
 
-const PostCarts = ({ posts }: { posts: IPost[] }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+const PostCarts = ({ posts }: { posts?: string }) => {
+  posts = JSON.parse(posts!);
+  const [loading] = useState<boolean>(false);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 justify-items-center mt-20 ">
-      <div>hellow</div>
-
       {loading ? (
         Array.from({ length: 9 }).map((items, index) => {
           return (
@@ -35,7 +33,7 @@ const PostCarts = ({ posts }: { posts: IPost[] }) => {
         })
       ) : posts && posts.length > 0 ? (
         posts.map((items) => {
-          return <div>hi</div>;
+          return <BlogsCard key={items._id} data={items} />;
         })
       ) : (
         <div className="col-span-3 flex justify-center items-center">
