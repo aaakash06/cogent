@@ -1,19 +1,16 @@
 // import Logo from "@/data/logo.svg";
+"use client";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 import ThemeSwitch from "./ThemeSwitch";
 import { IoSearchSharp } from "react-icons/io5";
+import { Link as LinkS } from "react-scroll";
 // import MobileNav from "./MobileNav";
 // import ThemeSwitch from "./ThemeSwitch";
 // import SearchButton from "./SearchButton";
 
 export const Header = () => {
-  const headerNavLinks = [
-    { href: "/", title: "Blog" },
-    // { href: "/tags", title: "Tags" },
-    { href: "/create", title: "Create" },
-    // { href: "/about", title: "About" },
-  ];
+  const headerNavLinks = [{ href: "/create", title: "Create" }];
 
   return (
     <header className="flex items-center justify-between py-10">
@@ -29,17 +26,23 @@ export const Header = () => {
         </Link>
       </div>
       <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
-        {headerNavLinks
-          // .filter((link) => link.href !== "/")
-          .map((link) => (
-            <Link
-              key={link.title}
-              href={link.href}
-              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
-            >
-              {link.title}
-            </Link>
-          ))}
+        <LinkS
+          className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block cursor-pointer"
+          to="blogs"
+          smooth={true}
+          duration={500}
+        >
+          Blog
+        </LinkS>
+
+        <Link
+          key={"create"}
+          href={"/create"}
+          className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+        >
+          Create
+        </Link>
+
         <span className="">
           <IoSearchSharp className="w-6 h-6 cursor-pointer" />
         </span>

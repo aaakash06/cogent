@@ -15,6 +15,8 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Image from "next/image";
+import { IPost } from "@/database/models.db";
+import ParseHTML from "./ParseHTML";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -31,13 +33,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function CardComponent() {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
+export default function CardComponent({ post }: { post: IPost }) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -46,7 +42,7 @@ export default function CardComponent() {
             R
           </Avatar>
         }
-        title="Shrimp and Chorizo Paella"
+        title={post.title || "title"}
         subheader="September 14, 2016"
       />
       {/* <CardMedia
@@ -56,20 +52,11 @@ export default function CardComponent() {
         alt="Paella dish"
       /> */}
       <div className="relative w-full h-[200px]">
-        <Image
-          alt="cat"
-          src={
-            "https://firebasestorage.googleapis.com/v0/b/cogent-5dcf9.appspot.com/o/1723224687411catconscience.jpg?alt=media&token=22ebeb8e-6fcc-424b-a443-1acf34849751"
-          }
-          className="object-cover"
-          fill
-        ></Image>
+        <Image alt="cat" src={post.img!} className="object-cover" fill></Image>
       </div>
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          <ParseHTML content={post.content}></ParseHTML>
         </Typography>
       </CardContent>
     </Card>
