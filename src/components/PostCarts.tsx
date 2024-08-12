@@ -3,6 +3,7 @@ import { IPost } from "@/database/models.db";
 import { useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 import BlogsCard from "./BlogsCard";
+import CardComponent from "./Card";
 
 const PostCarts = ({ posts }: { posts?: string }) => {
   posts = JSON.parse(posts!);
@@ -33,7 +34,8 @@ const PostCarts = ({ posts }: { posts?: string }) => {
         })
       ) : posts && posts.length > 0 ? (
         posts.map((items) => {
-          return <BlogsCard key={items._id} data={items} />;
+          return <CardComponent></CardComponent>;
+          // return <BlogsCard key={items._id} data={items} />;
         })
       ) : (
         <div className="col-span-3 flex justify-center items-center">
