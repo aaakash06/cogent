@@ -14,7 +14,7 @@ const Home = async () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full ">
-      <div className="fixed top-0 z-[-2] min-h-full w-[100%] bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" />
+      <div className="absolute top-0 z-[-2] min-h-full w-[100%] bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" />
       <div className="absolute size-96 bg-neutral-700 top-0 rounded-full blur-[150px] -z-50 " />
       <div className="my-[60px] sm:my-40 flex flex-col gap-14 items-center justify-center text-center ">
         <h1 className="text-5xl md:w-[75%] md:text-6xl xl:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 leading-tight px-4 md:px-0">
@@ -36,7 +36,7 @@ const Home = async () => {
           <BiSearchAlt className="absolute h-11 top-1 right-5 text-xl" />
         </div>
       </div>
-      <div
+      {/* <div
         className="space-y-10 w-full md:w-[45rem] lg:w-[60rem] xl:w-[70rem]"
         id="blogs"
       >
@@ -59,7 +59,7 @@ const Home = async () => {
             );
           })}
         </ul>
-      </div>
+      </div> */}
       <PostCarts posts={JSON.stringify(posts)}></PostCarts>
       <Footer />
     </div>

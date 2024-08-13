@@ -5,6 +5,7 @@ import MobileNav from "./MobileNav";
 import ThemeSwitch from "./ThemeSwitch";
 import { IoSearchSharp } from "react-icons/io5";
 import { Link as LinkS } from "react-scroll";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 // import MobileNav from "./MobileNav";
 // import ThemeSwitch from "./ThemeSwitch";
 // import SearchButton from "./SearchButton";
@@ -42,6 +43,19 @@ export const Header = () => {
         >
           Create
         </Link>
+        <SignedIn>
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                avatarBox: "h-7 w-7",
+              },
+              variables: {
+                colorPrimary: "#FF7000",
+              },
+            }}
+          ></UserButton>
+        </SignedIn>
 
         <span className="">
           <IoSearchSharp className="w-6 h-6 cursor-pointer" />

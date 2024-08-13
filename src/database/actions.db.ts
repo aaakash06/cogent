@@ -4,6 +4,7 @@ import { connectToDB } from "./connect.db";
 import { revalidatePath } from "next/cache";
 import {
   Category,
+  Comment,
   ICategory,
   IPost,
   ObjectIdType,
@@ -15,6 +16,8 @@ import { slugify } from "@/utils/slugify";
 import { Tag } from "lucide-react";
 import { FilterQuery } from "mongoose";
 import { categories } from "@/lib/categories";
+import mongoose from "mongoose";
+
 type PostType = {
   title: string;
   slug: string;
@@ -166,5 +169,48 @@ export const getAllPosts = async (
   } catch (err) {
     console.log("coudn't fetch posts");
     console.log(err);
+  }
+};
+
+export const getUserByClerkId = async (id: string) => {
+  try {
+    await connectToDB();
+    const user = await User.findOne({ clerkId: id });
+    if (!user) {
+      const user = await User.findOne({
+        clerkId: "user_2ef9jMdNJEPcQjbIky6MBXJc79L",
+      });
+      return user;
+    }
+    return user;
+  } catch (err) {
+    console.log("error occured during fetching user by clerk id ");
+  }
+};
+
+export async function getUserById(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    await connectToDB();
+    const user = await User.findById(userId);
+    return user;
+  } catch (err) {
+    console.log("not find user with the given user id ");
+  }
+}
+
+export const getUserByClerkIdAndPopulate = async (id: string) => {
+  try {
+    await connectToDB();
+    const user = await User.findOne({ clerkId: id });
+    const posts = await Post.find({ author: user._id }).populate("tags");
+    const comments = await Comment.find({ author: user._id }).populate({
+      path: "posts",
+      model: Post,
+    });
+
+    return { user, posts, comments };
+  } catch (err) {
+    console.log(err);
+    console.log("error occured during fetching user by clerk id ");
   }
 };
