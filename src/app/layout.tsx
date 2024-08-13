@@ -1,12 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import SectionContainer from "@/components/SectionContainer";
 import { ThemeContextProvider } from "@/context/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
+});
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-spaceGrotesk",
+});
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,10 +34,12 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="">
+      <html
+        lang="en"
+        className={`${inter.variable} ${spaceGrotesk.variable}  ${poppins.variable}`}
+      >
         {/* <ThemeContextProvider> */}
         <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
-          <p className="text-white dark:text-red-800">hellow</p>
           <SectionContainer>
             <Header></Header>
             {children}

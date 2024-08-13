@@ -284,8 +284,9 @@ const PostForm = ({
                         "alignright alignjustify | bullist numlist ",
                       content_style:
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }  ",
-                      skin: mode === "dark" ? "oxide-dark" : "oxide-dark",
-                      content_css: mode == "dark" ? "dark" : "light",
+                      skin: "oxide",
+                      // skin: mode === "dark" ? "oxide" : "oxide-dark",
+                      content_css: mode == "dark" ? "light" : "dark",
                     }}
                   />
                 </div>
