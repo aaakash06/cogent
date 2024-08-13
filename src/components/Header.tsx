@@ -2,7 +2,6 @@
 "use client";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
-import ThemeSwitch from "./ThemeSwitch";
 import { IoSearchSharp } from "react-icons/io5";
 import { Link as LinkS } from "react-scroll";
 import { SignedIn, UserButton } from "@clerk/nextjs";

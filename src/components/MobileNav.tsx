@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import headerNavLinks from "@/data/headerNavLinks";
 
 const MobileNav = () => {
+  const headerNavLinks = [{ href: "/create", title: "Create" }];
   const [navShow, setNavShow] = useState(false);
 
   const onToggleNav = () => {
