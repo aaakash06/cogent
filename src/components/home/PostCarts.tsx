@@ -10,6 +10,7 @@ const PostCarts = ({ posts }: { posts?: string }) => {
   return (
     <div className="flex flex-col items-start  w-full gap-10 mt-20 ">
       {posts && posts.length > 0 ? (
+        //@ts-ignore
         posts.map((item, index) => {
           return (
             <div
