@@ -21,14 +21,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="">
-        <ThemeContextProvider>
-          <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
-            <SectionContainer>
-              <Header></Header>
-              {children}
-            </SectionContainer>
-          </body>
-        </ThemeContextProvider>
+        {/* <ThemeContextProvider> */}
+        <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
+          <p className="text-white dark:text-red-800">hellow</p>
+          <SectionContainer>
+            <Header></Header>
+            {children}
+          </SectionContainer>
+        </body>
+        {/* </ThemeContextProvider> */}
       </html>
     </ClerkProvider>
   );
