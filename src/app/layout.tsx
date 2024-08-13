@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="dark">
+      <html lang="en" className="">
         <ThemeContextProvider>
           <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
             <SectionContainer>

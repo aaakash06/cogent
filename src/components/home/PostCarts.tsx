@@ -40,10 +40,10 @@ const PostCarts = ({ posts }: { posts?: string }) => {
                 <Link href={`/posts/${item.slug}`}>
                   <h1>{item.title}</h1>
                 </Link>
-                <p className="text-[18px] font-bold">
-                  {/* {item.desc.substring(0, 60)} */}
-                  <ParseHTML content={item.content}></ParseHTML>
-                </p>
+
+                {/* {item.desc.substring(0, 60)} */}
+                <ParseHTML content={item.content}></ParseHTML>
+
                 <div
                   className={styles.desc}
                   // dangerouslySetInnerHTML={{
