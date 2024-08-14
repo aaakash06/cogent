@@ -1,4 +1,5 @@
 import { Blog } from "@/utils/type";
+import ParseHTML from "../ParseHTML";
 
 const BlogCard = ({ blog }: { blog: Blog }) => {
   const { title, content, createdAt, categories, img } = blog;
@@ -24,7 +25,9 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
             >
               {title}
             </a>
-            <p className="mt-2 text-gray-600">{content}</p>
+            <p className="mt-2 text-gray-600">
+              <ParseHTML content={content}></ParseHTML>
+            </p>
           </div>
           <div className="mt-4">
             {/* <span className="text-gray-400 text-xs">{createdAt}</span> */}

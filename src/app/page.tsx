@@ -20,8 +20,8 @@ const Home = async () => {
       <div className="absolute -z-10 inset-0 overflow-hidden pointer-events-none bg-gray-50">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute w-60 h-60 bg-gradient-to-br from-indigo-300 to-purple-300 rounded-full mix-blend-multiply filter  opacity-70 animate-floatA"></div>
-            <div className="absolute top-[10rem] right-0 w-96 h-96 bg-gradient-to-br from-pink-300 to-red-300 rounded-full mix-blend-multiply filter  opacity-70 animate-floatB animation-delay-2000"></div>
+            <div className="absolute w-60 h-60 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full mix-blend-multiply filter  opacity-70 animate-floatA"></div>
+            <div className="absolute top-[10rem] right-0 w-96 h-96 bg-gradient-to-br from-pink-700 to-red-700 rounded-full mix-blend-multiply filter  opacity-70 animate-floatB animation-delay-2000"></div>
           </div>
           <div className="absolute inset-0 bg-grid-indigo-100/[0.03] bg-[size:20px_20px]"></div>
         </div>
@@ -74,8 +74,10 @@ const Home = async () => {
           })}
         </ul>
       </div>
+      <div className="w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] flex justify-center">
+        <BlogList blogs={JSON.stringify(posts)}></BlogList>
+      </div>
 
-      <BlogList blogs={JSON.stringify(posts)}></BlogList>
       <Footer />
     </div>
   );
