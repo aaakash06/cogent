@@ -214,3 +214,74 @@ export const getUserByClerkIdAndPopulate = async (id: string) => {
     console.log("error occured during fetching user by clerk id ");
   }
 };
+
+export const deleteUserByClerkId = async (id: string) => {
+  try {
+    connectToDB();
+    const user = await User.findOneAndDelete({ clerkId: id });
+    if (!user) {
+      console.log("no user found to delete in db");
+      return "no user found to delete in db";
+    }
+    return user;
+  } catch (err) {
+    console.log("error occured during fetching user and deleting by id ");
+    console.log(err);
+  }
+};
+
+export async function getUserNameById(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    // console.log(userId)
+    await connectToDB();
+    const user = await User.findById(userId);
+    // console.log('the required user is ')
+    //   console.log('user got')
+    // console.log(user)
+    return user.name;
+  } catch (err) {
+    console.log("not find username with the given id ");
+  }
+}
+interface CreateUserClerkType {
+  clerkId: string;
+  name: string;
+  username: string;
+  email: string;
+  picture: string;
+}
+export async function createUserByClerk(user: CreateUserClerkType) {
+  try {
+    await connectToDB();
+
+    console.log(user);
+
+    const mongoUser = await User.create(user);
+    return mongoUser;
+  } catch (err) {
+    console.log("couldn't create user in the database with clerkId");
+    console.log(err);
+  }
+}
+
+export async function updateUserByClerk(
+  id: string,
+  toUpdate: {
+    name: string;
+    username: string;
+    email: string;
+    picture: string;
+  }
+) {
+  try {
+    await connectToDB();
+
+    const mongoUser = await User.findOneAndUpdate({ clerkId: id }, toUpdate, {
+      new: true,
+    });
+    return mongoUser;
+  } catch (err) {
+    console.log("couldn't create user in the database with clerkId");
+    console.log(err);
+  }
+}

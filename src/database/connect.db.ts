@@ -10,11 +10,11 @@ export async function connectToDB() {
     if (mongoose.connection.readyState === 1) {
       // console.log("already connected to db");
     } else {
-      console.log("connecting to db....");
+      // console.log("connecting to db....");
 
       await connect(CS, { dbName: "cogent" });
 
-      console.log("mongo connected");
+      // console.log("mongo connected");
     }
   } catch (err) {
     console.log(err);

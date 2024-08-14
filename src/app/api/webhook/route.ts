@@ -1,6 +1,12 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import {
+  createUserByClerk,
+  updateUserByClerk,
+  deleteUserByClerkId,
+} from "@/database/actions.db";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
@@ -56,8 +62,44 @@ export async function POST(req: Request) {
   if (evt.type === "user.created") {
     console.log("userId:", evt.data.id);
   }
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  if (eventType == "user.created") {
+    const { username, email_addresses, first_name, last_name, image_url, id } =
+      evt.data;
+
+    const newUser = {
+      clerkId: id,
+      name: `${first_name + " " + last_name}`,
+      username: username as string,
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    };
+
+    const mongoUser = await createUserByClerk(newUser);
+    if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
+    return NextResponse.json({ status: "error" });
+  }
+  if (eventType == "user.updated") {
+    const { username, email_addresses, first_name, last_name, image_url, id } =
+      evt.data;
+
+    const toUpdate = {
+      name: `${first_name + " " + last_name}`,
+      username: username as string,
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    };
+
+    const mongoUser = await updateUserByClerk(id, toUpdate);
+    if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
+    return NextResponse.json({ status: "error" });
+  }
+
+  if (eventType == "user.deleted") {
+    const { id } = evt.data;
+    const user = deleteUserByClerkId(id!);
+    if (user) return NextResponse.json({ status: "deleted", user: user });
+    return NextResponse.json({ status: "error" });
+  }
 
   return new Response("", { status: 200 });
 }
