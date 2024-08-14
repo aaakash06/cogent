@@ -59,22 +59,24 @@ export async function POST(req: Request) {
   const eventType = evt.type;
   console.log(eventType);
   console.log("web hook activated");
-  // if (eventType == "user.created") {
-  //   const { username, email_addresses, first_name, last_name, image_url, id } =
-  //     evt.data;
+  if (eventType == "user.created") {
+    const { username, email_addresses, first_name, last_name, image_url, id } =
+      evt.data;
 
-  //   const newUser = {
-  //     clerkId: id,
-  //     name: `${first_name + " " + last_name}`,
-  //     username: username as string,
-  //     email: email_addresses[0].email_address,
-  //     picture: image_url,
-  //   };
+    const newUser = {
+      clerkId: id,
+      name: `${first_name + " " + last_name}`,
+      username: username as string,
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    };
 
-  //   const mongoUser = await createUserByClerk(newUser);
-  //   if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
-  //   return NextResponse.json({ status: "error" });
-  // }
+    console.log("user created");
+    console.log(newUser);
+    // const mongoUser = await createUserByClerk(newUser);
+    // if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
+    return NextResponse.json({ status: "error" });
+  }
   // if (eventType == "user.updated") {
   //   const { username, email_addresses, first_name, last_name, image_url, id } =
   //     evt.data;
