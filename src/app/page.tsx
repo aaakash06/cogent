@@ -9,6 +9,7 @@ import BlogList from "@/components/home/BlogList";
 import { Blog } from "@/utils/type";
 
 const Home = async () => {
+  console.log("site was hit");
   const category = "all";
   //@ts-ignore
   const posts: Blog[] = await getAllPosts()!;
