@@ -6,6 +6,7 @@ import SectionContainer from "@/components/SectionContainer";
 import { ThemeContextProvider } from "@/context/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextTopLoader from "nextjs-toploader";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,6 +46,7 @@ export default function RootLayout({
           <SectionContainer>
             <Header></Header>
             {children}
+            <Footer />
           </SectionContainer>
         </body>
         {/* </ThemeContextProvider> */}

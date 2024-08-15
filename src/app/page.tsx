@@ -91,8 +91,6 @@ const Home = async ({
       ) : (
         <div className="">No posts found</div>
       )}
-
-      <Footer />
     </div>
   );
 };

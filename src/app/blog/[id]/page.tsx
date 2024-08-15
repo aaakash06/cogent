@@ -9,11 +9,13 @@ const BlogPage = async ({ params }: { params: { id: string } }) => {
   const author: any = await getUserById(blog.author!);
   return (
     <section className=" bg-light-700 py-10 ">
-      <div className="pl-10">
+      <div className="pl-10 max-sm:pl-5">
         {" "}
-        <h1 className="text-3xl font-spaceGrotesk font-bold">{blog.title}</h1>
+        <h1 className="text-3xl max-sm:text-2xl font-spaceGrotesk font-bold">
+          {blog.title}
+        </h1>
       </div>
-      <div className="px-10 mt-5 flex justify-between">
+      <div className="px-10 max-sm:px-5 mt-5 flex justify-between">
         <div className="flex gap-2 items-center">
           <Image
             alt="avatar"
@@ -39,7 +41,9 @@ const BlogPage = async ({ params }: { params: { id: string } }) => {
           ></Image>
         </div>
       </div>
-      <div className="font-inter  mt-5 pl-10">{parse(blog.content)}</div>
+      <div className="font-inter  mt-5 pl-10 max-sm:pl-5">
+        {parse(blog.content)}
+      </div>
     </section>
   );
 };
