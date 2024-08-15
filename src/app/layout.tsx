@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import SectionContainer from "@/components/SectionContainer";
 import { ThemeContextProvider } from "@/context/theme";
 import { ClerkProvider } from "@clerk/nextjs";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         {/* <ThemeContextProvider> */}
         <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
+          <NextTopLoader></NextTopLoader>
           <SectionContainer>
             <Header></Header>
             {children}

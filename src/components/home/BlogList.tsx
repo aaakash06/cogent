@@ -34,7 +34,8 @@ const BlogCard = async ({ blog }: { blog: Blog }) => {
         {parse(content)}
         {/* </p> */}
         <div className="flex items-center font-inter text-sm gap-3 text-gray-500">
-          <span>{getTimeAgo(blog.createdAt)}</span>
+          <span>{"Jun 1"}</span>
+          {/* <span>{getTimeAgo(blog.createdAt)}</span> */}
 
           <span>{10} views</span>
 
