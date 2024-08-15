@@ -122,7 +122,7 @@ export async function createPost(data: PostType) {
 
 export const getAllPosts = async (
   searchParams?: string,
-  filter?: string,
+  category?: string,
   page?: number
 ) => {
   try {
@@ -140,28 +140,45 @@ export const getAllPosts = async (
     sortQuery = { createdAt: -1 };
     // newest recommended frequent unanswered
     await connectToDB();
-    switch (filter) {
-      case "newest":
-        sortQuery = { createdAt: -1 };
-        break;
-      case "frequent":
-        sortQuery = { views: -1 };
-        break;
+    // switch (filter) {
+    //   case "newest":
+    //     sortQuery = { createdAt: -1 };
+    //     break;
+    //   case "frequent":
+    //     sortQuery = { views: -1 };
+    //     break;
 
-      case "unanswered":
-        query.answers = { $size: 0 };
-        break;
+    //   case "unanswered":
+    //     query.answers = { $size: 0 };
+    //     break;
 
-      default:
-        sortQuery = { createdAt: -1 };
-        break;
+    //   default:
+    //     sortQuery = { createdAt: -1 };
+    //     break;
+    // }
+    if (category && category != "all") {
+      const tag = await Category.findOne({ title: category });
+      if (tag) {
+        const postsId = tag.posts;
+
+        const posts = [];
+        for (let id of postsId) {
+          const thePost = await Post.findById(id);
+
+          posts.push(thePost);
+        }
+        return posts;
+      } else {
+        console.log("category not found");
+        return [];
+      }
     }
 
     let allPosts: IPost[] = await Post.find(query)
       .populate({ path: "categories", model: Category })
       .sort(sortQuery)
-      .skip(skips)
-      .limit(5);
+      .skip(skips);
+    // .limit(5);
     // console.log(allPosts)
     const noPosts = await Post.countDocuments(query);
     return allPosts;
@@ -282,6 +299,17 @@ export async function updateUserByClerk(
     return mongoUser;
   } catch (err) {
     console.log("couldn't create user in the database with clerkId");
+    console.log(err);
+  }
+}
+
+export async function getPostById(id: string) {
+  try {
+    await connectToDB();
+    const post = await Post.findById(id);
+    return post;
+  } catch (err) {
+    console.log("couldn't find the post with the given id");
     console.log(err);
   }
 }

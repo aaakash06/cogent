@@ -8,11 +8,19 @@ import Image from "next/image";
 import BlogList from "@/components/home/BlogList";
 import { Blog } from "@/utils/type";
 
-const Home = async () => {
-  const category = "all";
-
+const Home = async ({
+  searchParams,
+}: {
+  searchParams: { q: string; category?: string; page: string };
+}) => {
+  // const category = "all";
   //@ts-ignore
-  const posts: Blog[] = await getAllPosts()!;
+  const posts: Blog[] = await getAllPosts(
+    searchParams.q,
+    searchParams.category,
+    +searchParams.page
+  )!;
+  const noPosts = posts.length;
 
   return (
     <div className="flex flex-col items-center justify-center w-full ">
@@ -52,7 +60,7 @@ const Home = async () => {
         </div> */}
       </div>
       <div
-        className="space-y-10 w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem]"
+        className="space-y-10 w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] "
         id="blogs"
       >
         <h1 className="text-3xl sm:text-4xl">Categories</h1>
@@ -63,7 +71,8 @@ const Home = async () => {
                 <Link
                   href={`/?category=${item}`}
                   className={`px-4 py-[6px] shadow-md rounded-full cursor-pointer ${
-                    category === item
+                    (searchParams.category?.toUpperCase() || "ALL") ===
+                    item.toUpperCase()
                       ? "bg-white text-black"
                       : "text-white bg-zinc-800"
                   }`}
@@ -75,9 +84,13 @@ const Home = async () => {
           })}
         </ul>
       </div>
-      <div className="w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] flex justify-center">
-        <BlogList blogs={JSON.stringify(posts)}></BlogList>
-      </div>
+      {noPosts > 0 ? (
+        <div className="w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] flex justify-center">
+          <BlogList blogs={JSON.stringify(posts)}></BlogList>
+        </div>
+      ) : (
+        <div className="">No posts found</div>
+      )}
 
       <Footer />
     </div>
