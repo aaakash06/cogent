@@ -69,9 +69,9 @@ export const Header = () => {
           ></UserButton>
         </SignedIn>
 
-        <span className="">
+        {/* <span className="">
           <IoSearchSharp className="w-6 h-6 cursor-pointer" />
-        </span>
+        </span> */}
 
         {/* <ThemeSwitch /> */}
         <MobileNav />

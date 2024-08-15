@@ -38,7 +38,7 @@ const Home = async ({
       </div>
 
       <div className="my-[60px] sm:my-40 flex flex-col gap-14 items-center justify-center text-center ">
-        <h1 className="text-5xl md:w-[75%] md:text-6xl xl:text-7xl font-bold bg-clip-text dark:text-transparent  dark:bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 leading-tight px-4 md:px-0">
+        <h1 className="text-5xl md:w-[75%] md:text-6xl xl:text-7xl font-bold bg-clip-text dark:text-transparent  dark:bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 leading-tight px-4 md:px-0  font-inter">
           Start Sharing Your Voice Today!
         </h1>
 
@@ -60,17 +60,17 @@ const Home = async ({
         </div> */}
       </div>
       <div
-        className="space-y-10 w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] "
+        className="space-y-10 w-full md:w-[45rem] mb-20 max-sm:mb-10 lg:w-[60rem] xl:w-[70rem] "
         id="blogs"
       >
         <h1 className="text-3xl sm:text-4xl">Categories</h1>
-        <ul className="flex gap-4 flex-wrap leading-loose font-poppins">
+        <ul className="flex gap-4 max-sm:gap-2 flex-wrap leading-loose font-poppins">
           {categories.map((item, index) => {
             return (
               <li key={index}>
                 <Link
                   href={`/?category=${item}`}
-                  className={`px-4 py-[6px] shadow-md rounded-full cursor-pointer ${
+                  className={`px-4 py-[6px] max-sm:text-[12px] shadow-md rounded-full cursor-pointer ${
                     (searchParams.category?.toUpperCase() || "ALL") ===
                     item.toUpperCase()
                       ? "bg-white text-black"
