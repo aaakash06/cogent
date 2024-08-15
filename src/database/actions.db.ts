@@ -24,7 +24,7 @@ type PostType = {
   content: string;
   img: string;
   categories: string[];
-  author: string;
+  author: ObjectIdType;
 };
 
 export async function dummyAction() {
@@ -80,7 +80,7 @@ export async function createPost(data: PostType) {
 
       if (categoryFound) {
         console.log("seems category has been found ");
-        console.log(categoryFound);
+        // console.log(categoryFound);
         categoryArray.push(categoryFound._id);
         categoryDocs.push(categoryFound);
         console.log("category added to the array");
@@ -113,7 +113,6 @@ export async function createPost(data: PostType) {
 
     // console.log(neww);
     revalidatePath("/");
-    //  return users;
   } catch (err) {
     console.log("coudn't create the Post");
     console.log(err);
@@ -188,10 +187,11 @@ export const getUserByClerkId = async (id: string) => {
   }
 };
 
-export async function getUserById(userId: mongoose.Schema.Types.ObjectId) {
+export async function getUserById(userId: ObjectIdType) {
   try {
     await connectToDB();
     const user = await User.findById(userId);
+    // console.log(user);
     return user;
   } catch (err) {
     console.log("not find user with the given user id ");

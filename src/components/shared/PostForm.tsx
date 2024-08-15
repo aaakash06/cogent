@@ -56,11 +56,7 @@ interface Props {
   postDetails?: string | any;
 }
 
-const PostForm = ({
-  dbUserId = "661b6d5087f1f91a1410b4d6",
-  type,
-  postDetails,
-}: Props) => {
+const PostForm = ({ dbUserId, type, postDetails }: Props) => {
   // const { mode } = useTheme();
   useEffect(() => {
     setStorage(getStorage(app));
@@ -105,29 +101,28 @@ const PostForm = ({
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          // console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case "paused":
-              console.log("Upload is paused");
+              // console.log("Upload is paused");
               break;
             case "running":
-              console.log("Upload is running");
+              // console.log("Upload is running");
               break;
           }
         },
         (error) => {},
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            // const userId = JSON.parse(dbUserId);
-            console.log(downloadURL);
+            // console.log(downloadURL);
 
             const data = {
               ...values,
               img: downloadURL,
-              author: dbUserId!,
+              author: JSON.parse(dbUserId!),
               slug: slugify(values.title),
             };
-            console.log(data);
+            // console.log(data);
             // submit
             if (type == "submit") {
               await createPost(data);
@@ -167,9 +162,9 @@ const PostForm = ({
         console.log("error occured during submiting the question form");
         setIsSubmitting(false);
       } finally {
-        // type == "submit"
-        //   ? router.push("/")
-        //   : router.push(`/questions/${postDetails._id}`);
+        type == "submit"
+          ? router.push("/")
+          : router.push(`/questions/${postDetails._id}`);
         setIsSubmitting(false);
       }
     }
@@ -321,7 +316,7 @@ const PostForm = ({
                     onChange={(e) => {
                       if (!e.target.files) return;
                       fileRef.current = e.target.files[0];
-                      console.log(fileRef.current);
+                      // console.log(fileRef.current);
                       setRefresh((f) => !f);
                     }}
                     className="hidden"
@@ -406,7 +401,7 @@ const PostForm = ({
         <Button
           type="submit"
           className=" bg-sky-700 py-1 text-white px-6 mt-10 hover:bg-yellow-300 hover:text-black"
-          // disabled={isSubmitting}
+          disabled={isSubmitting}
         >
           {type == "submit" ? "Submit the Question" : "Edit the Question"}
         </Button>
