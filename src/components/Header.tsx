@@ -55,7 +55,7 @@ export const Header = () => {
               href={"/sign-in"}
               className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
             >
-              Log In
+              Login
             </Link>
 
             <Link

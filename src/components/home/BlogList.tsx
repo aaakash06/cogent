@@ -4,9 +4,15 @@ import { Blog } from "@/utils/type";
 import image from "next/image";
 import parse from "html-react-parser";
 import { getUserById } from "@/database/actions.db";
-import { getTimeAgo } from "@/utils/helper";
 import Link from "next/link";
+import * as cheerio from "cheerio";
 
+// const cheerio = require("cheerio");
+
+function htmlToText(html: string) {
+  const $ = cheerio.load(html);
+  return $.text();
+}
 const BlogCard = async ({ blog }: { blog: Blog }) => {
   const { title, content, createdAt, img } = blog;
   const author: any = await getUserById(blog.author!);
@@ -28,12 +34,9 @@ const BlogCard = async ({ blog }: { blog: Blog }) => {
         <h2 className="text-2xl  max-md:text-[23px] max-sm:text-[20px] font-spaceGrotesk font-bold mb-1">
           {title}
         </h2>
-        {/* <p
-          suppressHydrationWarning
-          className="text-gray-600 mb-2 max-md:text-[15px]  font-inter"
-        > */}
-        {parse(content)}
-        {/* </p> */}
+        <p className="text-gray-600 w-full  mb-2 max-md:text-[15px]  font-inter line-clamp-1">
+          {htmlToText(content)}
+        </p>
         {/* <div className="flex items-center font-inter text-sm gap-3 text-gray-500">
           <span>{"Jun 1"}</span>
           <span>{getTimeAgo(blog.createdAt)}</span>

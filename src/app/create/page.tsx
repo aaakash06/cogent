@@ -7,7 +7,7 @@ const Create = async () => {
   const { userId } = auth();
   const dbUser = await getUserByClerkId(userId!);
   return (
-    <div className="my-10 max-sm:my-2">
+    <div className="my-10 max-sm:my-2 ">
       <PostForm dbUserId={JSON.stringify(dbUser._id)} type="submit"></PostForm>
     </div>
   );
