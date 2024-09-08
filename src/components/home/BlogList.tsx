@@ -47,8 +47,8 @@ const BlogCard = async ({ blog }: { blog: Blog }) => {
         </div> */}
       </div>
       {img && (
-        <div className="w-24 h-24 relative ">
-          <Image src={img} alt={title} className=" object-cover" fill />
+        <div className="w-40 h-40 max-w-40 max-h-40 relative ">
+          <Image src={img} alt={title} className=" object-contain" fill />
         </div>
       )}
     </div>

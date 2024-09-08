@@ -4,9 +4,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon, Newspaper, BadgePlus, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 const menuItems = [
-  { icon: Newspaper, label: "Blog", href: "/blog" },
+  { icon: Newspaper, label: "Blog", href: "/" },
   { icon: BadgePlus, label: "Create", href: "/create" },
   { icon: LogIn, label: "Login", href: "/sign-in" },
 
@@ -19,7 +20,12 @@ export default function ResponsiveSidebar() {
       <h2 className="mb-4 text-lg font-semibold">Menu</h2>
       <nav className="flex flex-col space-y-2">
         {menuItems.map((item, index) => (
-          <Button key={index} variant="ghost" className="justify-start">
+          <Button
+            key={index}
+            onClick={closeSidebar}
+            variant="ghost"
+            className="justify-start"
+          >
             <item.icon className="mr-2 h-4 w-4" />
             <Link href={item.href}>{item.label}</Link>
           </Button>
@@ -27,10 +33,13 @@ export default function ResponsiveSidebar() {
       </nav>
     </ScrollArea>
   );
-
+  const [isOpen, setIsOpen] = useState(false);
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
   return (
     <div className={`absolute h-screen sm:hidden `}>
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button
             variant="outline"
