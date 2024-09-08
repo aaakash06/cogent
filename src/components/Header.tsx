@@ -1,18 +1,11 @@
-// import Logo from "@/data/logo.svg";
 "use client";
 import Link from "next/link";
-import MobileNav from "./MobileNav";
-import { IoSearchSharp } from "react-icons/io5";
 import { Link as LinkS } from "react-scroll";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton, useSession, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import ResponsiveSidebar from "./MobileNav";
-// import MobileNav from "./MobileNav";
-// import ThemeSwitch from "./ThemeSwitch";
-// import SearchButton from "./SearchButton";
 
 export const Header = () => {
-  const headerNavLinks = [{ href: "/create", title: "Create" }];
+  const user = useUser();
   const pathname = usePathname();
 
   return (
@@ -20,8 +13,6 @@ export const Header = () => {
       <div>
         <Link href="/">
           <div className="flex items-center justify-between">
-            {/* <div className="mr-3"><Logo /></div> */}
-
             <div className="hidden  text-2xl font-semibold sm:block bg-">
               <h1 className="text-4xl font-spaceGrotesk font-extrabold text-gray-800 tracking-tight">
                 Cogent
@@ -56,6 +47,27 @@ export const Header = () => {
         >
           Create
         </Link>
+
+        {!user.isSignedIn && (
+          <>
+            <Link
+              key={"sign-in"}
+              href={"/sign-in"}
+              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+            >
+              Log In
+            </Link>
+
+            <Link
+              key={"sign-up"}
+              href={"/sign-up"}
+              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+            >
+              Register
+            </Link>
+          </>
+        )}
+
         <SignedIn>
           <UserButton
             afterSignOutUrl="/"
