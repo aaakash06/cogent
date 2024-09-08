@@ -42,9 +42,9 @@ export default function ResponsiveSidebar() {
     </ScrollArea>
   );
 
-  if (isMobile) {
-    return (
-      <div className={`absolute h-screen `}>
+  return (
+    <div className="flex h-screen">
+      {isMobile ? (
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -60,7 +60,15 @@ export default function ResponsiveSidebar() {
             <SidebarContent />
           </SheetContent>
         </Sheet>
-      </div>
-    );
-  }
+      ) : (
+        <aside className="w-64 border-r">
+          <SidebarContent />
+        </aside>
+      )}
+      <main className="flex-1 overflow-auto p-6">
+        <h1 className="text-2xl font-bold">Main Content</h1>
+        <p className="mt-4">Your main content goes here.</p>
+      </main>
+    </div>
+  );
 }

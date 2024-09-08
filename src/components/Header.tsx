@@ -6,6 +6,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { Link as LinkS } from "react-scroll";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
+import ResponsiveSidebar from "./MobileNav";
 // import MobileNav from "./MobileNav";
 // import ThemeSwitch from "./ThemeSwitch";
 // import SearchButton from "./SearchButton";
@@ -68,13 +69,6 @@ export const Header = () => {
             }}
           ></UserButton>
         </SignedIn>
-
-        {/* <span className="">
-          <IoSearchSharp className="w-6 h-6 cursor-pointer" />
-        </span> */}
-
-        {/* <ThemeSwitch /> */}
-        <MobileNav />
       </div>
     </header>
   );

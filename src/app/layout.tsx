@@ -7,6 +7,7 @@ import { ThemeContextProvider } from "@/context/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextTopLoader from "nextjs-toploader";
 import Footer from "@/components/Footer";
+import ResponsiveSidebar from "@/components/MobileNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({
             {children}
           </SectionContainer>
           <Footer />
+          <ResponsiveSidebar></ResponsiveSidebar>
         </body>
         {/* </ThemeContextProvider> */}
       </html>
