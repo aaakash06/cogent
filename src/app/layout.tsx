@@ -46,8 +46,8 @@ export default function RootLayout({
           <SectionContainer>
             <Header></Header>
             {children}
-            <Footer />
           </SectionContainer>
+          <Footer />
         </body>
         {/* </ThemeContextProvider> */}
       </html>

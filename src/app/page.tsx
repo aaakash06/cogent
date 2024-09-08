@@ -85,7 +85,7 @@ const Home = async ({
         </ul>
       </div>
       {noPosts > 0 ? (
-        <div className="w-full md:w-[45rem] mb-20 lg:w-[60rem] xl:w-[70rem] flex justify-center">
+        <div className="w-full md:w-[45rem] mb-10 lg:w-[60rem] xl:w-[70rem] flex justify-center">
           <BlogList blogs={JSON.stringify(posts)}></BlogList>
         </div>
       ) : (
