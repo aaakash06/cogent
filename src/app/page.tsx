@@ -24,8 +24,6 @@ const Home = async ({
 
   return (
     <div className="flex flex-col items-center justify-center w-full ">
-      {/* <div className="absolute top-0 z-[-2] min-h-full w-[100%] bg-[radial-gradient(#ffffff33_1px,#010816_1px)] bg-[size:20px_20px] opacity-[0.6]" /> */}
-      {/* <div className="absolute size-96 bg-neutral-700 top-0 rounded-full blur-[150px] -z-50 " /> */}
       <div className="absolute -z-10 inset-0 overflow-hidden pointer-events-none bg-gray-50">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-0 left-0 w-full h-full">
@@ -50,14 +48,6 @@ const Home = async ({
           </span>{" "}
           Unleash your creativity and join a community of fellow bloggers today.
         </p>
-        {/* <div className="w-4/5 md:w-[40%] relative">
-          <Input
-            type="text"
-            placeholder="Search Blogs"
-            className="rounded-xl h-12 bg-transparent backdrop-blur-sm"
-          />
-          <BiSearchAlt className="absolute h-11 top-1 right-5 text-xl" />
-        </div> */}
       </div>
       <div
         className="space-y-10 w-full md:w-[45rem] mb-20 max-sm:mb-10 lg:w-[60rem] xl:w-[70rem] "

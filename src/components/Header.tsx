@@ -9,11 +9,11 @@ export const Header = () => {
   const pathname = usePathname();
 
   return (
-    <header className="flex items-center justify-between py-10">
+    <header className="flex items-center justify-between py-10 ">
       <div>
         <Link href="/">
           <div className="flex items-center justify-between">
-            <div className="hidden  text-2xl font-semibold sm:block bg-">
+            <div className="hidden  text-2xl font-semibold sm:block ">
               <h1 className="text-4xl font-spaceGrotesk font-extrabold text-gray-800 tracking-tight">
                 Cogent
               </h1>

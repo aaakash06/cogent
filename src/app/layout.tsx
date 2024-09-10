@@ -42,7 +42,7 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable}  ${poppins.variable}`}
       >
         {/* <ThemeContextProvider> */}
-        <body className="bg-white text-black  antialiased dark:bg-gray-950 dark:text-white">
+        <body className="text-black  overflow-x-hidden antialiased dark:bg-gray-950 dark:text-white">
           <NextTopLoader></NextTopLoader>
           <SectionContainer>
             <Header></Header>
