@@ -6,6 +6,7 @@ import {
   Category,
   Comment,
   ICategory,
+  Interaction,
   IPost,
   ObjectIdType,
   Post,
@@ -13,10 +14,10 @@ import {
   User,
 } from "./models.db";
 import { slugify } from "@/utils/slugify";
-import { Tag } from "lucide-react";
 import { FilterQuery } from "mongoose";
-import { categories } from "@/lib/categories";
 import mongoose from "mongoose";
+import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 type PostType = {
   title: string;
@@ -311,5 +312,31 @@ export async function getPostById(id: string) {
   } catch (err) {
     console.log("couldn't find the post with the given id");
     console.log(err);
+  }
+}
+
+export async function deleteItem(id: string, type: string) {
+  console.log("deleting", id);
+  try {
+    await connectToDB();
+    if (type == "post") {
+      await Post.findByIdAndDelete(id);
+      await Comment.deleteMany({ post: id });
+      await Interaction.deleteMany({ post: id });
+      await Category.updateMany(
+        { post: { $in: id } },
+        { $pull: { questions: id } }
+      );
+    } else {
+      await Comment.findByIdAndDelete(id);
+      await Post.updateMany({ $pull: { answers: id } });
+      await Interaction.deleteMany({ answer: id });
+    }
+    revalidatePath("/");
+  } catch (err) {
+    console.log(err);
+    console.log("couldn't execute the delete edit operations");
+  } finally {
+    redirect("/");
   }
 }

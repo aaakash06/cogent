@@ -1,13 +1,29 @@
-import { getAllPosts, getPostById, getUserById } from "@/database/actions.db";
+import {
+  deleteItem,
+  getAllPosts,
+  getPostById,
+  getUserById,
+} from "@/database/actions.db";
 import React from "react";
 import Image from "next/image";
 import { getTimeAgo, htmlToText } from "@/utils/helper";
+import { Trash2 } from "lucide-react";
+import DeleteItem from "@/components/DeleteItem";
 
 const BlogPage = async ({ params }: { params: { id: string } }) => {
   const blog = await getPostById(params.id);
+  if (!blog)
+    return (
+      <section className="w-full bg-light-500 py-20 text-center text-white text-2xl">
+        {" "}
+        <h2>No post found with this id</h2>
+      </section>
+    );
   const author: any = await getUserById(blog.author!);
   return (
-    <section className=" bg-light-700 py-10 ">
+    <section className=" bg-light-700 py-10 relative ">
+      <DeleteItem id={params.id}></DeleteItem>
+
       <div className="pl-10 max-sm:pl-5">
         {" "}
         <h1 className="text-3xl max-sm:text-2xl font-spaceGrotesk font-bold">
