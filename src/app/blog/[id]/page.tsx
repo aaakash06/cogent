@@ -7,10 +7,11 @@ import {
 import React from "react";
 import Image from "next/image";
 import { getTimeAgo, htmlToText } from "@/utils/helper";
-import { Trash2 } from "lucide-react";
 import DeleteItem from "@/components/DeleteItem";
+import { auth } from "@clerk/nextjs/server";
 
 const BlogPage = async ({ params }: { params: { id: string } }) => {
+  const { userId } = auth();
   const blog = await getPostById(params.id);
   if (!blog)
     return (
@@ -22,7 +23,9 @@ const BlogPage = async ({ params }: { params: { id: string } }) => {
   const author: any = await getUserById(blog.author!);
   return (
     <section className=" bg-light-700 py-10 relative ">
-      <DeleteItem id={params.id}></DeleteItem>
+      {userId?.trim() == "user_2kgNAEYs0uKpSpC3g5jZe3WrMnV" && (
+        <DeleteItem id={params.id}></DeleteItem>
+      )}
 
       <div className="pl-10 max-sm:pl-5">
         {" "}
