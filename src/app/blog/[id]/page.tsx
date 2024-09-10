@@ -1,8 +1,7 @@
 import { getAllPosts, getPostById, getUserById } from "@/database/actions.db";
 import React from "react";
 import Image from "next/image";
-import parse from "html-react-parser/lib/index";
-import { getTimeAgo } from "@/utils/helper";
+import { getTimeAgo, htmlToText } from "@/utils/helper";
 
 const BlogPage = async ({ params }: { params: { id: string } }) => {
   const blog = await getPostById(params.id);
@@ -41,9 +40,9 @@ const BlogPage = async ({ params }: { params: { id: string } }) => {
           ></Image>
         </div>
       </div>
-      <div className="font-inter  mt-5 pl-10 max-sm:pl-5">
-        {parse(blog.content)}
-      </div>
+      <p className="font-inter break-all  mt-5 pl-10 max-sm:pl-5">
+        {htmlToText(blog.content)}
+      </p>
     </section>
   );
 };

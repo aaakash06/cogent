@@ -3,7 +3,6 @@ import { Inter, Poppins, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import SectionContainer from "@/components/SectionContainer";
-import { ThemeContextProvider } from "@/context/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextTopLoader from "nextjs-toploader";
 import Footer from "@/components/Footer";
@@ -42,7 +41,7 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable}  ${poppins.variable}`}
       >
         {/* <ThemeContextProvider> */}
-        <body className="text-black  overflow-x-hidden antialiased dark:bg-gray-950 dark:text-white">
+        <body className="text-black antialiased dark:bg-gray-950 dark:text-white">
           <NextTopLoader></NextTopLoader>
           <SectionContainer>
             <Header></Header>
