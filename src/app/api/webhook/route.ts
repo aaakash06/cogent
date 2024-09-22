@@ -1,15 +1,15 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-// import {
-//   createUserByClerk,
-//   deleteUserByClerkId,
-//   updateUserByClerk,
-// } from "@/database/actions.db";
 import { NextResponse } from "next/server";
+import {
+  createUserByClerk,
+  updateUserByClerk,
+  deleteUserByClerkId,
+} from "@/database/actions.db";
 
 export async function POST(req: Request) {
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
+  // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -54,49 +54,52 @@ export async function POST(req: Request) {
     });
   }
 
-  // Get the ID and type
-  // const { id } = evt.data;
+  // Do something with the payload
+  // For this guide, you simply log the payload to the console
+  const { id } = evt.data;
   const eventType = evt.type;
-  console.log(eventType);
-  console.log("web hook activated");
-  // if (eventType == "user.created") {
-  //   const { username, email_addresses, first_name, last_name, image_url, id } =
-  //     evt.data;
 
-  //   const newUser = {
-  //     clerkId: id,
-  //     name: `${first_name + " " + last_name}`,
-  //     username: username as string,
-  //     email: email_addresses[0].email_address,
-  //     picture: image_url,
-  //   };
+  if (evt.type === "user.created") {
+    console.log("userId:", evt.data.id);
+  }
+  if (eventType == "user.created") {
+    const { username, email_addresses, first_name, last_name, image_url, id } =
+      evt.data;
 
-  //   const mongoUser = await createUserByClerk(newUser);
-  //   if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
-  //   return NextResponse.json({ status: "error" });
-  // }
-  // if (eventType == "user.updated") {
-  //   const { username, email_addresses, first_name, last_name, image_url, id } =
-  //     evt.data;
+    const newUser = {
+      clerkId: id,
+      name: `${first_name + " " + last_name}`,
+      username: username as string,
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    };
 
-  //   const toUpdate = {
-  //     name: `${first_name + " " + last_name}`,
-  //     username: username as string,
-  //     email: email_addresses[0].email_address,
-  //     picture: image_url,
-  //   };
+    const mongoUser = await createUserByClerk(newUser);
+    if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
+    return NextResponse.json({ status: "error" });
+  }
+  if (eventType == "user.updated") {
+    const { username, email_addresses, first_name, last_name, image_url, id } =
+      evt.data;
 
-  //   const mongoUser = await updateUserByClerk(id, toUpdate);
-  //   if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
-  //   return NextResponse.json({ status: "error" });
-  // }
+    const toUpdate = {
+      name: `${first_name + " " + last_name}`,
+      username: username as string,
+      email: email_addresses[0].email_address,
+      picture: image_url,
+    };
 
-  // if (eventType == "user.deleted") {
-  //   const { id } = evt.data;
-  //   const user = deleteUserByClerkId(id!);
-  //   if (user) return NextResponse.json({ status: "deleted", user: user });
-  //   return NextResponse.json({ status: "error" });
-  // }
+    const mongoUser = await updateUserByClerk(id, toUpdate);
+    if (mongoUser) return NextResponse.json({ status: "ok", user: mongoUser });
+    return NextResponse.json({ status: "error" });
+  }
+
+  if (eventType == "user.deleted") {
+    const { id } = evt.data;
+    const user = deleteUserByClerkId(id!);
+    if (user) return NextResponse.json({ status: "deleted", user: user });
+    return NextResponse.json({ status: "error" });
+  }
 
   return new Response("", { status: 200 });
 }

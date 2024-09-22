@@ -1,13 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optionaln
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAz8GsBMKSPet633PplPPsQAvTFzgEjrZs",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "cogent-5dcf9.firebaseapp.com",
   projectId: "cogent-5dcf9",
   storageBucket: "cogent-5dcf9.appspot.com",
@@ -18,6 +17,3 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-export { auth };

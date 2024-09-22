@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ControllerRenderProps, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Tag from "@/components/shared/Tag";
-// import { editQuestions, postQuestion } from "@/database/actions.db";
+
 import { useRouter } from "next/navigation";
-// import useTheme from "@/context/context";
-import { Content } from "next/font/google";
+
 import { FaUpload } from "react-icons/fa6";
 import {
   getStorage,
@@ -34,7 +32,6 @@ import {
 import { app } from "@/utils/firebase";
 import { createPost } from "@/database/actions.db";
 import { slugify } from "@/utils/slugify";
-// import Editor from "quill/core/editor";
 
 const postSchema = z.object({
   title: z.string().min(2, {
@@ -43,7 +40,6 @@ const postSchema = z.object({
   content: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
-  img: z.string().optional(),
   categories: z
     .string()
     .array()
@@ -56,23 +52,14 @@ interface Props {
   postDetails?: string | any;
 }
 
-const PostForm = ({
-  dbUserId = "661b6d5087f1f91a1410b4d6",
-  type,
-  postDetails,
-}: Props) => {
+const PostForm = ({ dbUserId, type, postDetails }: Props) => {
   // const { mode } = useTheme();
-  useEffect(() => {
-    setStorage(getStorage(app));
-  }, []);
 
   const mode = "dark";
   type = "submit";
   const router = useRouter();
   const fileRef = useRef<File | null>(null);
   const [refresh, setRefresh] = useState(false);
-
-  const [storage, setStorage] = useState<null | FirebaseStorage>(null);
 
   let newCats: string[] = [];
 
@@ -93,10 +80,12 @@ const PostForm = ({
       title: string;
       content: string;
       categories: string[];
-      img?: string | undefined;
     }) => {
       const name = new Date().getTime() + fileRef.current!.name;
-      const storageRef = ref(storage!, name);
+      const storage = getStorage(app);
+      console.log(storage);
+
+      const storageRef = ref(storage, name);
 
       const uploadTask = uploadBytesResumable(storageRef, fileRef.current!);
 
@@ -115,19 +104,20 @@ const PostForm = ({
               break;
           }
         },
-        (error) => {},
+        (error) => {
+          console.log("error occured while uploading the image to the bucket");
+        },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            // const userId = JSON.parse(dbUserId);
-            console.log(downloadURL);
+            // console.log(downloadURL);
 
             const data = {
               ...values,
               img: downloadURL,
-              author: dbUserId!,
+              author: JSON.parse(dbUserId!),
               slug: slugify(values.title),
             };
-            console.log(data);
+            // console.log(data);
             // submit
             if (type == "submit") {
               await createPost(data);
@@ -142,7 +132,7 @@ const PostForm = ({
         }
       );
     },
-    [storage]
+    []
   );
 
   // 1. Define your form.
@@ -167,9 +157,9 @@ const PostForm = ({
         console.log("error occured during submiting the question form");
         setIsSubmitting(false);
       } finally {
-        // type == "submit"
-        //   ? router.push("/")
-        //   : router.push(`/questions/${postDetails._id}`);
+        type == "submit"
+          ? router.push("/")
+          : router.push(`/questions/${postDetails._id}`);
         setIsSubmitting(false);
       }
     }
@@ -284,8 +274,9 @@ const PostForm = ({
                         "alignright alignjustify | bullist numlist ",
                       content_style:
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }  ",
-                      skin: mode === "dark" ? "oxide-dark" : "oxide-dark",
-                      content_css: mode == "dark" ? "dark" : "light",
+                      skin: "oxide",
+                      // skin: mode === "dark" ? "oxide" : "oxide-dark",
+                      content_css: mode == "dark" ? "light" : "dark",
                     }}
                   />
                 </div>
@@ -297,57 +288,38 @@ const PostForm = ({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="img"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-[1rem] font-bold dark:text-white">
-                {" "}
-                Upload Image <span className="text-red-500">*</span>{" "}
-              </FormLabel>
-              <FormControl>
-                <>
-                  <label
-                    htmlFor="input-file"
-                    className="ml-10 border border-input bg-background hover:bg-accent hover:text-accent-foreground gap-2 flex-grow h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    <FaUpload /> Upload Image
-                  </label>
-                  <input
-                    type="file"
-                    name="img"
-                    onChange={(e) => {
-                      if (!e.target.files) return;
-                      fileRef.current = e.target.files[0];
-                      console.log(fileRef.current);
-                      setRefresh((f) => !f);
-                    }}
-                    className="hidden"
-                    id="input-file"
-                    // accept="image/*"
-                    required
-                  />
-                  <span className="ml-10 text-blue-300">
-                    {" "}
-                    [ {fileRef.current && fileRef.current.name} ]
-                  </span>
 
-                  {/* <Input
-                    className="no-focus  dark:text-white dark:border-black  dark:bg-gray-700"
-                    type="file"
-                    disabled={type == "edit"}
-                    onKeyDown={(e) => {
-                      handleTagKeyDown(e, field);
-                    }}
-                  /> */}
-                </>
-              </FormControl>
-              <FormDescription className="text-blue-400 text-[12px] dark:text-white "></FormDescription>
-              <FormMessage className=" text-red-500" />
-            </FormItem>
-          )}
-        />{" "}
+        <>
+          <span className="text-[1rem] font-bold dark:text-white">
+            {" "}
+            Upload Image <span className="text-red-500">*</span>{" "}
+          </span>
+          <label
+            htmlFor="input-file"
+            className="ml-10 border border-input bg-background hover:bg-accent hover:text-accent-foreground gap-2 flex-grow h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            <FaUpload /> Upload Image
+          </label>
+          <input
+            type="file"
+            name="img"
+            onChange={(e) => {
+              if (!e.target.files) return;
+              fileRef.current = e.target.files[0];
+              // console.log(fileRef.current);
+              setRefresh((f) => !f);
+            }}
+            className="hidden"
+            id="input-file"
+            // accept="image/*"
+            required
+          />
+          <span className="ml-10 text-blue-300">
+            {" "}
+            [ {fileRef.current && fileRef.current.name} ]
+          </span>
+        </>
+
         <FormField
           control={form.control}
           name="categories"
@@ -405,7 +377,7 @@ const PostForm = ({
         <Button
           type="submit"
           className=" bg-sky-700 py-1 text-white px-6 mt-10 hover:bg-yellow-300 hover:text-black"
-          // disabled={isSubmitting}
+          disabled={isSubmitting}
         >
           {type == "submit" ? "Submit the Question" : "Edit the Question"}
         </Button>

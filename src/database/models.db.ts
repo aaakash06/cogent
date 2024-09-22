@@ -2,19 +2,16 @@ import mongoose, { Schema, Document } from "mongoose";
 export type ObjectIdType = mongoose.Schema.Types.ObjectId;
 
 export interface IUser extends mongoose.Document {
+  clerkId: string;
   name: string;
   username?: string;
   email: string;
-  emailVerified: Date;
   password?: string;
   bio?: string;
-  picture?: string;
+  picture: string;
   portfolioWebSite?: string;
-  saved?: ObjectIdType[];
-  posts?: ObjectIdType[];
-  comments?: ObjectIdType[];
+  saved?: mongoose.Schema.Types.ObjectId[];
   joinAt: Date;
-  // account and session
 }
 
 export interface ICategory extends mongoose.Document {
@@ -54,17 +51,15 @@ export interface IInteraction extends Document {
 }
 
 const userSchema = new mongoose.Schema<IUser>({
+  clerkId: { type: String, required: true },
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  emailVerified: { type: Date },
   password: { type: String },
   bio: { type: String },
-  picture: { type: String },
+  picture: { type: String, required: true },
   portfolioWebSite: { type: String },
   saved: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   joinAt: { type: Date, default: Date.now },
 });
 

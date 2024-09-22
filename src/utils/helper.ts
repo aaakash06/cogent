@@ -1,10 +1,16 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import queryString from "query-string";
+import * as cheerio from "cheerio";
 // checking sync with git
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function htmlToText(html: string) {
+  const $ = cheerio.load(html);
+  return $.text();
 }
 
 export function getTimeAgo(date: Date): string {

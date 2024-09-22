@@ -8,8 +8,7 @@ const ParseHTML = ({ content }: { content: string }) => {
   useEffect(() => {
     Prism.highlightAll();
   }, []);
-
-  return <div className="text-sm ">{parse(content)}</div>;
+  return parse(content);
 };
 
 export default ParseHTML;

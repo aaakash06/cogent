@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,16 +18,37 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        inter: ["var(--font-inter)"],
+        spaceGrotesk: ["var(--font-spaceGrotesk)"],
+        poppins: ["var(--font-poppins)"],
+      },
       colors: {
+        primary: {
+          500: "#FF7000",
+          100: "#FFF1E6",
+        },
+        dark: {
+          100: "#000",
+          200: "#0F1117",
+          300: "#151821",
+          400: "#212734",
+          500: "#3F4354",
+        },
+        light: {
+          900: "#FFFFFF",
+          800: "#F4F6F8",
+          850: "#FDFDFD",
+          700: "#DCE3F1",
+          500: "#7B8EC8",
+          400: "#858EAD",
+        },
+        "accent-blue": "#1DA1F2",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -67,14 +88,31 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "pulse-grow": {
+          "0%, 100%": {
+            transform: "scale(1) rotate(0deg)",
+            opacity: "0.7",
+          },
+          "50%": {
+            transform: "scale(1.1) rotate(15deg)",
+            opacity: "0.9",
+          },
+        },
+
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        floatA: "pulse-grow 5s ease-in-out infinite",
+        floatB: "float 5s ease-in-out infinite",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

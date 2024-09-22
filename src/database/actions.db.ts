@@ -6,6 +6,7 @@ import {
   Category,
   Comment,
   ICategory,
+  Interaction,
   IPost,
   ObjectIdType,
   Post,
@@ -13,10 +14,10 @@ import {
   User,
 } from "./models.db";
 import { slugify } from "@/utils/slugify";
-import { Tag } from "lucide-react";
 import { FilterQuery } from "mongoose";
-import { categories } from "@/lib/categories";
 import mongoose from "mongoose";
+import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 type PostType = {
   title: string;
@@ -24,7 +25,7 @@ type PostType = {
   content: string;
   img: string;
   categories: string[];
-  author: string;
+  author: ObjectIdType;
 };
 
 export async function dummyAction() {
@@ -80,7 +81,7 @@ export async function createPost(data: PostType) {
 
       if (categoryFound) {
         console.log("seems category has been found ");
-        console.log(categoryFound);
+        // console.log(categoryFound);
         categoryArray.push(categoryFound._id);
         categoryDocs.push(categoryFound);
         console.log("category added to the array");
@@ -113,7 +114,6 @@ export async function createPost(data: PostType) {
 
     // console.log(neww);
     revalidatePath("/");
-    //  return users;
   } catch (err) {
     console.log("coudn't create the Post");
     console.log(err);
@@ -123,7 +123,7 @@ export async function createPost(data: PostType) {
 
 export const getAllPosts = async (
   searchParams?: string,
-  filter?: string,
+  category?: string,
   page?: number
 ) => {
   try {
@@ -141,28 +141,45 @@ export const getAllPosts = async (
     sortQuery = { createdAt: -1 };
     // newest recommended frequent unanswered
     await connectToDB();
-    switch (filter) {
-      case "newest":
-        sortQuery = { createdAt: -1 };
-        break;
-      case "frequent":
-        sortQuery = { views: -1 };
-        break;
+    // switch (filter) {
+    //   case "newest":
+    //     sortQuery = { createdAt: -1 };
+    //     break;
+    //   case "frequent":
+    //     sortQuery = { views: -1 };
+    //     break;
 
-      case "unanswered":
-        query.answers = { $size: 0 };
-        break;
+    //   case "unanswered":
+    //     query.answers = { $size: 0 };
+    //     break;
 
-      default:
-        sortQuery = { createdAt: -1 };
-        break;
+    //   default:
+    //     sortQuery = { createdAt: -1 };
+    //     break;
+    // }
+    if (category && category != "all") {
+      const tag = await Category.findOne({ title: category });
+      if (tag) {
+        const postsId = tag.posts;
+
+        const posts = [];
+        for (let id of postsId) {
+          const thePost = await Post.findById(id);
+
+          posts.push(thePost);
+        }
+        return posts;
+      } else {
+        console.log("category not found");
+        return [];
+      }
     }
 
     let allPosts: IPost[] = await Post.find(query)
       .populate({ path: "categories", model: Category })
       .sort(sortQuery)
-      .skip(skips)
-      .limit(5);
+      .skip(skips);
+    // .limit(5);
     // console.log(allPosts)
     const noPosts = await Post.countDocuments(query);
     return allPosts;
@@ -188,10 +205,11 @@ export const getUserByClerkId = async (id: string) => {
   }
 };
 
-export async function getUserById(userId: mongoose.Schema.Types.ObjectId) {
+export async function getUserById(userId: ObjectIdType) {
   try {
     await connectToDB();
     const user = await User.findById(userId);
+    // console.log(user);
     return user;
   } catch (err) {
     console.log("not find user with the given user id ");
@@ -214,3 +232,111 @@ export const getUserByClerkIdAndPopulate = async (id: string) => {
     console.log("error occured during fetching user by clerk id ");
   }
 };
+
+export const deleteUserByClerkId = async (id: string) => {
+  try {
+    connectToDB();
+    const user = await User.findOneAndDelete({ clerkId: id });
+    if (!user) {
+      console.log("no user found to delete in db");
+      return "no user found to delete in db";
+    }
+    return user;
+  } catch (err) {
+    console.log("error occured during fetching user and deleting by id ");
+    console.log(err);
+  }
+};
+
+export async function getUserNameById(userId: mongoose.Schema.Types.ObjectId) {
+  try {
+    // console.log(userId)
+    await connectToDB();
+    const user = await User.findById(userId);
+    // console.log('the required user is ')
+    //   console.log('user got')
+    // console.log(user)
+    return user.name;
+  } catch (err) {
+    console.log("not find username with the given id ");
+  }
+}
+interface CreateUserClerkType {
+  clerkId: string;
+  name: string;
+  username: string;
+  email: string;
+  picture: string;
+}
+export async function createUserByClerk(user: CreateUserClerkType) {
+  try {
+    await connectToDB();
+
+    console.log(user);
+
+    const mongoUser = await User.create(user);
+    return mongoUser;
+  } catch (err) {
+    console.log("couldn't create user in the database with clerkId");
+    console.log(err);
+  }
+}
+
+export async function updateUserByClerk(
+  id: string,
+  toUpdate: {
+    name: string;
+    username: string;
+    email: string;
+    picture: string;
+  }
+) {
+  try {
+    await connectToDB();
+
+    const mongoUser = await User.findOneAndUpdate({ clerkId: id }, toUpdate, {
+      new: true,
+    });
+    return mongoUser;
+  } catch (err) {
+    console.log("couldn't create user in the database with clerkId");
+    console.log(err);
+  }
+}
+
+export async function getPostById(id: string) {
+  try {
+    await connectToDB();
+    const post = await Post.findById(id);
+    return post;
+  } catch (err) {
+    console.log("couldn't find the post with the given id");
+    console.log(err);
+  }
+}
+
+export async function deleteItem(id: string, type: string) {
+  console.log("deleting", id);
+  try {
+    await connectToDB();
+    if (type == "post") {
+      await Post.findByIdAndDelete(id);
+      await Comment.deleteMany({ post: id });
+      await Interaction.deleteMany({ post: id });
+      await Category.updateMany(
+        { post: { $in: id } },
+        { $pull: { questions: id } }
+      );
+    } else {
+      await Comment.findByIdAndDelete(id);
+      await Post.updateMany({ $pull: { answers: id } });
+      await Interaction.deleteMany({ answer: id });
+    }
+    revalidatePath("/");
+  } catch (err) {
+    console.log(err);
+    console.log("couldn't execute the delete edit operations");
+  } finally {
+    redirect("/");
+  }
+}
