@@ -5,16 +5,21 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon, Newspaper, BadgePlus, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 const menuItems = [
   { icon: Newspaper, label: "Blog", href: "/" },
   { icon: BadgePlus, label: "Create", href: "/create" },
+];
+
+const menuItemsOut = [
   { icon: LogIn, label: "Login", href: "/sign-in" },
 
   { icon: LogOut, label: "Register", href: "/sign-up" },
 ];
 
 export default function ResponsiveSidebar() {
+  const { isSignedIn } = useAuth();
   const SidebarContent = () => (
     <ScrollArea className="h-full py-6 pl-6 pr-6 lg:pr-0">
       <h2 className="mb-4 text-lg font-semibold">Menu</h2>
@@ -30,6 +35,18 @@ export default function ResponsiveSidebar() {
             <Link href={item.href}>{item.label}</Link>
           </Button>
         ))}
+        {!isSignedIn &&
+          menuItemsOut.map((item, index) => (
+            <Button
+              key={index}
+              onClick={closeSidebar}
+              variant="ghost"
+              className="justify-start"
+            >
+              <item.icon className="mr-2 h-4 w-4" />
+              <Link href={item.href}>{item.label}</Link>
+            </Button>
+          ))}
       </nav>
     </ScrollArea>
   );

@@ -9,7 +9,7 @@ export const Header = () => {
   const pathname = usePathname();
 
   return (
-    <header className="flex items-center justify-between py-10 ">
+    <header className="flex items-center justify-between py-10  relative">
       <div>
         <Link href="/">
           <div className="flex items-center justify-between">
@@ -69,17 +69,19 @@ export const Header = () => {
         )}
 
         <SignedIn>
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: "h-7 w-7",
-              },
-              variables: {
-                colorPrimary: "#FF7000",
-              },
-            }}
-          ></UserButton>
+          <div className="max-sm:absolute top-7 right-5">
+            {" "}
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-7 w-7",
+                },
+                variables: {
+                  colorPrimary: "#FF7000",
+                },
+              }}
+            ></UserButton>
+          </div>
         </SignedIn>
       </div>
     </header>
